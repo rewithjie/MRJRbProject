@@ -5,12 +5,13 @@
 ---
 
 ## 1. Master Layout Template
+
 **File**: `resources/views/format/layout.blade.php`
 
 ```blade
 <!DOCTYPE html>
 <html lang="en">
-<head>  
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Student Management Dashboard')</title>
@@ -50,7 +51,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-graduation-cap me-2"></i>Student Dashboard
+                <i class="fas fa-graduation-cap me-2"></i>MRJR PROJECT
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -102,6 +103,7 @@
 ```
 
 **Key Blade Concepts**:
+
 - `@yield('title', 'default')` - Placeholder for page title
 - `@yield('Content')` - Placeholder for page content
 - `@section()` and `@show` - Define section with output
@@ -110,6 +112,7 @@
 ---
 
 ## 2. Home/Dashboard Page
+
 **File**: `resources/views/clientDashboard.blade.php`
 
 ```blade
@@ -182,6 +185,7 @@
 ```
 
 **Key Blade Concepts**:
+
 - `@extends()` - Inherit from master layout
 - `@section()` and `@endsection` - Define section content
 - `{{ route() }}` - Generate named route URLs
@@ -189,6 +193,7 @@
 ---
 
 ## 3. Students List Page (Main Component)
+
 **File**: `resources/views/students.blade.php`
 
 ```blade
@@ -308,6 +313,7 @@
 ```
 
 **Key Blade Concepts**:
+
 - `@forelse()` - Loop with empty state handling
 - `@if()` - Conditional rendering
 - `$loop->iteration` - Auto-numbering
@@ -318,6 +324,7 @@
 ---
 
 ## 4. About Page
+
 **File**: `resources/views/clientAboutUs.blade.php`
 
 ```blade
@@ -350,7 +357,7 @@
                                 <i class="fas fa-bullseye"></i> Our Mission
                             </h6>
                             <p class="card-text text-muted">
-                                To provide educational institutions with a reliable and user-friendly platform 
+                                To provide educational institutions with a reliable and user-friendly platform
                                 for managing student information and academic records with ease.
                             </p>
                         </div>
@@ -364,7 +371,7 @@
                                 <i class="fas fa-eye"></i> Our Vision
                             </h6>
                             <p class="card-text text-muted">
-                                To be the leading solution in educational management systems, empowering institutions 
+                                To be the leading solution in educational management systems, empowering institutions
                                 worldwide to streamline their operations and improve student outcomes.
                             </p>
                         </div>
@@ -412,7 +419,7 @@
                 <div class="card-body text-center">
                     <h6 class="card-title mb-2">Need Help?</h6>
                     <p class="card-text text-muted mb-3">
-                        Have questions about the Student Management Dashboard? 
+                        Have questions about the Student Management Dashboard?
                     </p>
                     <a href="{{ route('home') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-home me-2"></i> Back to Home
@@ -427,6 +434,7 @@
 ---
 
 ## 5. Student Model
+
 **File**: `app/Models/Student.php`
 
 ```php
@@ -445,6 +453,7 @@ class Student extends Model
 ---
 
 ## 6. Student Controller
+
 **File**: `app/Http/Controllers/StudentController.php`
 
 ```php
@@ -512,7 +521,7 @@ class StudentController extends Controller
                 'course' => 'Bachelor of Science in Engineering'
             ],
         ];
-        
+
         return view('students', ['students' => $students]);
     }
 
@@ -533,6 +542,7 @@ class StudentController extends Controller
 ---
 
 ## 7. Routes Configuration
+
 **File**: `routes/web.php`
 
 ```php
@@ -551,6 +561,7 @@ Route::resource('students', StudentController::class);
 ---
 
 ## 8. Database Migration
+
 **File**: `database/migrations/2026_03_12_071134_create_students_table.php`
 
 ```php
@@ -588,35 +599,34 @@ return new class extends Migration
 
 ## Blade Directives Reference
 
-| Directive | Purpose | Example |
-|-----------|---------|---------|
-| `@extends()` | Inherit from layout | `@extends('format.layout')` |
-| `@section()` | Define section | `@section('Content')...@endsection` |
-| `@yield()` | Output section | `@yield('title', 'Default')` |
-| `@forelse()` | Loop with empty | `@forelse($items as $item)...@empty` |
-| `@if/@elseif/@else` | Conditionals | `@if($age == 19)...@endif` |
-| `@foreach` | Loop | `@foreach($items as $item)...@endforeach` |
-| `@endforelse` | End forelse | |
-| `@empty` | Empty collection | `@empty...@endempty` |
-| `{{ }}` | Echo/output | `{{ $variable }}` |
-| `{{ route() }}` | Generate route URL | `{{ route('home') }}` |
-| `{{ count() }}` | Count items | `{{ count($students) }}` |
-| `@show` | Output section | `@section()...@show` |
+| Directive           | Purpose             | Example                                   |
+| ------------------- | ------------------- | ----------------------------------------- |
+| `@extends()`        | Inherit from layout | `@extends('format.layout')`               |
+| `@section()`        | Define section      | `@section('Content')...@endsection`       |
+| `@yield()`          | Output section      | `@yield('title', 'Default')`              |
+| `@forelse()`        | Loop with empty     | `@forelse($items as $item)...@empty`      |
+| `@if/@elseif/@else` | Conditionals        | `@if($age == 19)...@endif`                |
+| `@foreach`          | Loop                | `@foreach($items as $item)...@endforeach` |
+| `@endforelse`       | End forelse         |                                           |
+| `@empty`            | Empty collection    | `@empty...@endempty`                      |
+| `{{ }}`             | Echo/output         | `{{ $variable }}`                         |
+| `{{ route() }}`     | Generate route URL  | `{{ route('home') }}`                     |
+| `{{ count() }}`     | Count items         | `{{ count($students) }}`                  |
+| `@show`             | Output section      | `@section()...@show`                      |
 
 ---
 
 ## Column Names in Student Table
 
-| Column | Type | Nullable | Purpose |
-|--------|------|----------|---------|
-| id | BigInt | No | Primary Key |
-| fname | String | No | First Name |
-| mname | String | No | Middle Name |
-| lname | String | No | Last Name |
-| email | String | No | Email Address |
-| contact_no | String | No | Contact Number |
-| age | Integer | Yes | Student Age |
-| course | String | Yes | Course/Program |
-| created_at | Timestamp | No | Created Date |
-| updated_at | Timestamp | No | Updated Date |
-
+| Column     | Type      | Nullable | Purpose        |
+| ---------- | --------- | -------- | -------------- |
+| id         | BigInt    | No       | Primary Key    |
+| fname      | String    | No       | First Name     |
+| mname      | String    | No       | Middle Name    |
+| lname      | String    | No       | Last Name      |
+| email      | String    | No       | Email Address  |
+| contact_no | String    | No       | Contact Number |
+| age        | Integer   | Yes      | Student Age    |
+| course     | String    | Yes      | Course/Program |
+| created_at | Timestamp | No       | Created Date   |
+| updated_at | Timestamp | No       | Updated Date   |

@@ -6,7 +6,6 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PSUController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
-use App\Http\Controllers\ActivityLogController;
 
 
 Route::get('/hi', function () {
@@ -125,12 +124,4 @@ Route::get('/about',[StudentController::class, 'about'])->name('about');
 
 Route::resource('students', StudentController::class);
 Route::resource('degrees', DegreeController::class);
-
-// Activity Logs Routes
-Route::prefix('logs')->name('logs.')->group(function () {
-    Route::get('/', [ActivityLogController::class, 'index'])->name('index');
-    Route::get('/{id}', [ActivityLogController::class, 'show'])->name('show');
-    Route::get('/export/csv', [ActivityLogController::class, 'export'])->name('export');
-    Route::delete('/clear-old', [ActivityLogController::class, 'clearOldLogs'])->name('clear-old');
-});
 

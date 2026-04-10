@@ -4,6 +4,11 @@
 
 @section('Content')
     <h1>Student List</h1>
+    @if(session('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+        @endif
     
     <table border="1" cellpadding="10" cellspacing="0">
         <thead>
