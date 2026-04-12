@@ -14,8 +14,7 @@ class Degree extends Model
     /**
      * Get the students for the degree.
      */
-    public function students(): HasMany
-    {
-        return $this->hasMany(Student::class);
+    public function students() {
+        return $this->hasMany(Student::class, 'degree_id');
     }
 }

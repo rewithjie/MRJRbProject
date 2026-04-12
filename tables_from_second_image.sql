@@ -101,6 +101,21 @@
 --   UNIQUE KEY `degrees_title_unique` (`title`)
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- CREATE TABLE `profiles` (
+--   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+--   `user_id` BIGINT UNSIGNED NOT NULL,
+--   `bio` VARCHAR(50) NULL,
+--   `avatar` VARCHAR(50) NULL,
+--   `created_at` TIMESTAMP NULL DEFAULT NULL,
+--   `updated_at` TIMESTAMP NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`),
+--   INDEX `profiles_user_id_index` (`user_id`),
+--   CONSTRAINT `profiles_user_id_foreign`
+--     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+--     ON DELETE CASCADE
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- CREATE TABLE IF NOT EXISTS `students` (
 --   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 --   `fname` VARCHAR(255) NOT NULL,

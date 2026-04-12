@@ -9,6 +9,18 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Please fix the following errors:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('students.update', $student->id) }}">
                         @csrf
                         @method('PUT')
@@ -71,15 +83,23 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="contact_no" class="form-label">Contact Number *</label>
+                            <label for="contact_no" class="form-label">Contact Number * (11 digits)</label>
                             <input 
                                 type="text" 
-                                class="form-control" 
+                                class="form-control @error('contact_no') is-invalid @enderror" 
                                 id="contact_no" 
                                 name="contact_no" 
-                                placeholder="09XX-XXX-XXXX"
+                                placeholder="09212345678"
+                                pattern="[0-9]{11}"
+                                maxlength="11"
+                                inputmode="numeric"
                                 value="{{ old('contact_no', $student->contact_no) }}"
                                 required>
+                            @error('contact_no')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">

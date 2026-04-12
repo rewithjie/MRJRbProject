@@ -46,7 +46,7 @@ class StudentController extends Controller
             //'mname' => 'required|string|max:1',
             'lname' => 'required|min:2',
             'email' => 'required|email|unique:students,email',
-            'contact_no' => 'required',
+            'contact_no' => 'required|digits:11',
             'degree_id' => 'required'
 
         ]);
@@ -61,6 +61,7 @@ class StudentController extends Controller
                 'lname'=>$request->input('lname'),
                 'email' => $request->input('email'),
                 'contact_no'=>$request->input('contact_no'),
+                'degree_id' => $request->input('degree_id'),
         ]);
 
         $msg = "Student is Added!";
@@ -111,7 +112,7 @@ class StudentController extends Controller
             'fname' => 'required|min:2',
             'lname' => 'required|min:2',
             'email' => 'required|email|unique:students,email,' . $id,
-            'contact_no' => 'required',
+            'contact_no' => 'required|digits:11',
             'degree_id' => 'required',
         ]);
 
@@ -128,7 +129,7 @@ class StudentController extends Controller
             'degree_id' => $request->input('degree_id'),
         ]);
 
-        return redirect('/students')->with('message', 'Student Updated Successfully');
+        return redirect()->route('students.show', $student)->with('message', 'Student Updated Successfully');
     }
 
     public function destroy(string $id)

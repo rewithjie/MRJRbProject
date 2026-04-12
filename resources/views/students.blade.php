@@ -16,10 +16,8 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Contact</th>
-                <th>Age</th>
-                <th>Course</th>
-                <th>Status</th>
+                <th>Contact Number</th>
+                <th>Degree</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -30,8 +28,7 @@
                     <td>{{ $student->lname }}, {{ $student->fname }} {{ $student->mname }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->contact_no }}</td>
-                    <td>{{ $student->age }}</td>
-                    <td>{{ $student->course }}</td>
+                    <td>{{ $student['degree']['degree_title'] }}</td>
                     <td>
                         @if($student->age == 19)
                             Freshman Student

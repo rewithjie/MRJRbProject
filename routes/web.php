@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PSUController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
+use App\Http\Controllers\PageController;
 
 
 Route::get('/hi', function () {
@@ -125,3 +126,8 @@ Route::get('/about',[StudentController::class, 'about'])->name('about');
 Route::resource('students', StudentController::class);
 Route::resource('degrees', DegreeController::class);
 
+Route::get('/user_profile', [PageController::class, 'userProfile'])->name('user.profile');
+Route::get('/user_posts', [PageController::class, 'userPosts']);
+Route::get('/student__courses', [PageController::class, 'studentCourse']);
+Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
+Route::get('/setup-test-data', [PageController::class, 'setupTestData']);

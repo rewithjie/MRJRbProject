@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Course extends Model
 {
     protected $fillable = [
-        'title',
-        'description',
+        'course_name',
     ];
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class)->withTimestamps();
+        return $this->belongsToMany(Student::class, 'course__students', 'course_id', 'student_id');
     }
 }
