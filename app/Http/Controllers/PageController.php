@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Course;
+use Illuminate\Support\Facades\File;
 
 class PageController extends Controller
 {
@@ -76,4 +77,55 @@ class PageController extends Controller
     public function setupTestData() {
     
         }
+
+    public function logs()
+    {
+        $logFile = storage_path('logs/laravel.log');
+        $logs = [];
+
+        if (File::exists($logFile)) {
+            $content = File::get($logFile);
+            $lines = explode("\n", $content);
+
+            foreach ($lines as $line) {
+                if (empty(trim($line))) {
+                    continue;
+                }
+
+                // Look for Student-related log messages
+                if (strpos($line, 'Student') === false) {
+                    continue;
+                }
+
+                // Extract message and JSON data
+                $message = '';
+                $data = null;
+
+                // Extract the log message
+                if (preg_match('/\]\s+\w+\.\w+:\s+(.+?)(?:\s+\{|$)/', $line, $msgMatch)) {
+                    $message = trim($msgMatch[1]);
+                } else {
+                    continue;
+                }
+
+                // Extract JSON data
+                if (preg_match('/\{[\s\S]*\}/', $line, $jsonMatch)) {
+                    $data = json_decode($jsonMatch[0], true);
+                }
+
+                // Only add if we have data
+                if ($data && isset($data['student_name'])) {
+                    $logs[] = [
+                        'message' => $message,
+                        'data' => $data,
+                    ];
+                }
+            }
+        }
+
+        // Reverse to show newest first
+        $logs = array_reverse($logs);
+
+        return view('logs', ['logs' => $logs]);
+    }
     }

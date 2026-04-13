@@ -131,3 +131,4 @@ Route::get('/user_posts', [PageController::class, 'userPosts']);
 Route::get('/student__courses', [PageController::class, 'studentCourse']);
 Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
 Route::get('/setup-test-data', [PageController::class, 'setupTestData']);
+Route::get('/logs', [PageController::class, 'logs'])->name('logs');
