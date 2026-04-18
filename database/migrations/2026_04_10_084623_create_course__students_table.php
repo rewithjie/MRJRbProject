@@ -16,6 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('student_id');
             $table->timestamps();
+
+            // Add foreign keys
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+
+            // Add unique constraint to prevent duplicate enrollments
+            $table->unique(['course_id', 'student_id']);
         });
     }
 

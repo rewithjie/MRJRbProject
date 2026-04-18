@@ -18,6 +18,9 @@ return new class extends Migration
             if (!Schema::hasColumn('students', 'course')) {
                 $table->string('course')->nullable()->after('age');
             }
+            if (!Schema::hasColumn('students', 'degree_id')) {
+                $table->unsignedBigInteger('degree_id')->nullable()->after('course');
+            }
         });
     }
 
@@ -27,11 +30,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('students', function (Blueprint $table) {
-            if (Schema::hasColumn('students', 'age')) {
-                $table->dropColumn('age');
+            if (Schema::hasColumn('students', 'degree_id')) {
+                $table->dropColumn('degree_id');
             }
             if (Schema::hasColumn('students', 'course')) {
                 $table->dropColumn('course');
+            }
+            if (Schema::hasColumn('students', 'age')) {
+                $table->dropColumn('age');
             }
         });
     }

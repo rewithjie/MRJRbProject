@@ -12,10 +12,10 @@ class Student extends Model
         'fname', 
         'mname', 
         'lname', 
-        'email', 
         'password',
         'contact_no', 
-        'degree_id'
+        'degree_id',
+        'user_account_id'
     ];
 
     protected $hidden = [

@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->unsignedBigInteger('degree_id')->nullable()->after('contact_no');
-            $table->foreign('degree_id')->references('id')->on('degrees')->onDelete('set null');
+            // Only add the column if it doesn't exist (in case it was added in previous migration)
+            if (!Schema::hasColumn('students', 'degree_id')) {
+                $table->unsignedBigInteger('degree_id')->nullable()->after('contact_no');
+            }
+            // Add foreign key constraint
+            try {
+                $table->foreign('degree_id')->references('id')->on('degrees')->onDelete('set null');
+            } catch (\Exception $e) {
+                // Foreign key might already exist
+            }
         });
     }
 

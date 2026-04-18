@@ -75,8 +75,8 @@ class PageController extends Controller
     }
 
     public function setupTestData() {
-    
-        }
+        return response('Test data setup method. Add implementation as needed.');
+    }
 
     public function logs()
     {
@@ -128,4 +128,8 @@ class PageController extends Controller
 
         return view('logs', ['logs' => $logs]);
     }
+
+    public function maintenance() {
+        return "Down for maintenance. Please check back later.";
     }
+}

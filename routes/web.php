@@ -123,7 +123,6 @@ Route::get('/greetings',[ClientController::class, 'displayGreetings']);
 Route::get('/',[StudentController::class, 'home'])->name('home');
 Route::get('/about',[StudentController::class, 'about'])->name('about');
 
-Route::resource('students', StudentController::class);
 Route::resource('degrees', DegreeController::class);
 
 Route::get('/user_profile', [PageController::class, 'userProfile'])->name('user.profile');
@@ -132,3 +131,12 @@ Route::get('/student__courses', [PageController::class, 'studentCourse']);
 Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
 Route::get('/setup-test-data', [PageController::class, 'setupTestData']);
 Route::get('/logs', [PageController::class, 'logs'])->name('logs');
+
+// Route::get('/maintenance', [PageController::class, 'maintenance'])->name('maintenance');
+Route::resource('students', StudentController::class);
+
+// Route::middleware('group')->group(function(){
+// Route::get('/about',[StudentController::class, 'about'])->name('about');
+// Route::get('/user_profile', [PageController::class, 'userProfile'])->name('user.profile');
+// Route::get('/user_posts', [PageController::class, 'userPosts']);
+// });
