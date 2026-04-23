@@ -7,6 +7,7 @@ use App\Http\Controllers\PSUController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\AuthController;
 
 
 Route::get('/hi', function () {
@@ -120,7 +121,9 @@ Route::get('/psu/eoms-policy', [PSUController::class, 'EOMSPolicy'])->name('psu.
 
 Route::get('/greetings',[ClientController::class, 'displayGreetings']);
 
-Route::get('/',[StudentController::class, 'home'])->name('home');
+// Main home route
+Route::get('/', [StudentController::class, 'home'])->name('home');
+
 Route::get('/about',[StudentController::class, 'about'])->name('about');
 
 Route::resource('degrees', DegreeController::class);
@@ -132,7 +135,7 @@ Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
 Route::get('/setup-test-data', [PageController::class, 'setupTestData']);
 Route::get('/logs', [PageController::class, 'logs'])->name('logs');
 
-// Route::get('/maintenance', [PageController::class, 'maintenance'])->name('maintenance');
+Route::get('/maintenance', [PageController::class, 'maintenance'])->name('maintenance');
 Route::resource('students', StudentController::class);
 
 // Route::middleware('group')->group(function(){
@@ -140,3 +143,14 @@ Route::resource('students', StudentController::class);
 // Route::get('/user_profile', [PageController::class, 'userProfile'])->name('user.profile');
 // Route::get('/user_posts', [PageController::class, 'userPosts']);
 // });
+
+Route::get('/student/login', [AuthController::class, 'showLogin'])->name('student.login.show');
+Route::post('/student/login', [AuthController::class, 'login'])->name('student.login');
+
+Route::middleware('student.auth')->group(function () {
+    Route::get('/student/dashboard', [AuthController::class, 'dashboard'])->name('student.dashboard');
+    Route::get('/student/new-dashboard', [AuthController::class, 'dashboard'])->name('student.new.dashboard');
+    Route::get('/student/home-dashboard', [AuthController::class, 'homeDashboard'])->name('student.home');
+    Route::post('/student/change-password', [AuthController::class, 'changePassword'])->name('student.password.update');
+    Route::post('/student/logout', [AuthController::class, 'logout'])->name('student.logout');
+});

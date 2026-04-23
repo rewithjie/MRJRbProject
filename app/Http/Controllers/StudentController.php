@@ -7,6 +7,7 @@ use App\Models\Student;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -70,6 +71,7 @@ class StudentController extends Controller
             'lname' => 'required|min:2',
             'email' => 'required|email|unique:students,email',
             'contact_no' => 'required|digits:11',
+            'password' => 'required|min:8|confirmed',
             'degree_id' => 'required'
 
         ]);
@@ -84,6 +86,7 @@ class StudentController extends Controller
                 'lname'=>$request->input('lname'),
                 'email' => $request->input('email'),
                 'contact_no'=>$request->input('contact_no'),
+                'password' => $request->input('password'),
                 'degree_id' => $request->input('degree_id'),
         ]);
 
@@ -98,7 +101,7 @@ class StudentController extends Controller
             'timestamp' => now(),
         ]);
 
-        return redirect()->route('students.index')->with('success', 'Student created successfully');
+        return redirect()->route('student.login.show')->with('success', 'Student registered successfully. Please login with your credentials.');
     }
 
     public function show(string $id)

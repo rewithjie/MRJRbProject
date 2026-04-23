@@ -12,6 +12,14 @@
     <div class="divider"></div>
 
     <div class="dashboard-grid">
+        <a href="{{ route('student.dashboard') }}" class="dashboard-card">
+            <div class="card-icon">
+                <i class="fas fa-id-card"></i>
+            </div>
+            <div class="card-title">Student Dashboard</div>
+            <div class="card-description">Open the student home dashboard</div>
+        </a>
+
         <a href="{{ route('students.index') }}" class="dashboard-card">
             <div class="card-icon">
                 <i class="fas fa-graduation-cap"></i>

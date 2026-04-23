@@ -13,9 +13,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
 
 
-    // global middleware
-    $middleware->append(\App\Http\Middleware\PromotionMW::class);
-
     //middleware group
     $middleware->group('group',[
         \App\Http\Middleware\MiddlewareOne::class,
@@ -24,7 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         //route middleware
-    $middleware->alias(['maintenance'=>\App\Http\Middleware\DownForMaintnanceMW::class]);
+    $middleware->alias([
+        'maintenance' => \App\Http\Middleware\DownForMaintnanceMW::class,
+        'student.auth' => \App\Http\Middleware\StudentAuth::class
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

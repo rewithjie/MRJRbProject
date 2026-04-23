@@ -130,6 +130,6 @@ class PageController extends Controller
     }
 
     public function maintenance() {
-        return "Down for maintenance. Please check back later.";
+        return response()->view('maintenance', [], 503);
     }
 }

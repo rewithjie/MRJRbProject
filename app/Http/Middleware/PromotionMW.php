@@ -60,6 +60,10 @@ class PromotionMW
                 <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
                 <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
                 <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
+                <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
+                <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
+                <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
+                <span class="banner-text"> WELCOME TO LARAVEL DEVELOPMENT </span>
             </div>
         </div>
         HTML;

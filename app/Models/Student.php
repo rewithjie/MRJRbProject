@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Hash;
+use App\Models\UserAccount;
 
 class Student extends Model
 {
@@ -12,6 +14,7 @@ class Student extends Model
         'fname', 
         'mname', 
         'lname', 
+        'email',
         'password',
         'contact_no', 
         'degree_id',
@@ -23,11 +26,29 @@ class Student extends Model
     ];
 
     /**
+     * Mutator to hash password when setting it
+     */
+    public function setPasswordAttribute($value)
+    {
+        if (!empty($value)) {
+            $this->attributes['password'] = Hash::make($value);
+        }
+    }
+
+    /**
      * Get the degree for the student.
      */
     public function degree(): BelongsTo
     {
         return $this->belongsTo(Degree::class);
+    }
+
+    /**
+     * Linked login/account details for this student.
+     */
+    public function userAccount(): BelongsTo
+    {
+        return $this->belongsTo(UserAccount::class);
     }
 
     /**

@@ -98,6 +98,37 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="password" class="form-label">Password *</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Enter password (min 8 characters)"
+                                minlength="8"
+                                required>
+                            @error('password')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <small class="text-muted d-block mt-1">Password will be securely encrypted with Argon2id</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password_confirmation" class="form-label">Confirm Password *</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="password_confirmation" 
+                                name="password_confirmation" 
+                                placeholder="Confirm password"
+                                minlength="8"
+                                required>
+                            @error('password_confirmation')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="contact_no" class="form-label">Contact Number *</label>
                             <input 
                                 type="text" 
