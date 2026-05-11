@@ -11,14 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('user_accounts')) {
-            Schema::create('user_accounts', function (Blueprint $table) {
+        if (!Schema::hasTable('teachers')) {
+            Schema::create('teachers', function (Blueprint $table) {
                 $table->id();
-                $table->string('username')->unique();
+                $table->string('fname');
+                $table->string('mname');
+                $table->string('lname');
                 $table->string('email')->unique();
+                $table->string('contact_no');
                 $table->string('password');
-                $table->string('role');
-                $table->integer('is_active')->default(0);
+                $table->string('specialty')->nullable();
+                $table->string('department')->nullable();
+                $table->boolean('is_active')->default(true);
                 $table->timestamps();
             });
         }
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_accounts');
+        Schema::dropIfExists('teachers');
     }
 };

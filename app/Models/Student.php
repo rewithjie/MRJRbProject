@@ -18,7 +18,8 @@ class Student extends Model
         'password',
         'contact_no', 
         'degree_id',
-        'user_account_id'
+        'user_account_id',
+        'role',
     ];
 
     protected $hidden = [

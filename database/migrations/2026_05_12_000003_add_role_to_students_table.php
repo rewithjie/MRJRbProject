@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('students', 'degree_id')) {
+        if (!Schema::hasColumn('students', 'role')) {
             Schema::table('students', function (Blueprint $table) {
-                $table->unsignedBigInteger('degree_id')->nullable()->after('contact_no');
-                $table->foreign('degree_id')->references('id')->on('degrees')->onDelete('set null');
+                $table->string('role')->default('student')->after('password');
             });
         }
     }
@@ -24,9 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->dropForeign(['degree_id']);
-            $table->dropColumn('degree_id');
-        });
+        if (Schema::hasColumn('students', 'role')) {
+            Schema::table('students', function (Blueprint $table) {
+                $table->dropColumn('role');
+            });
+        }
     }
 };

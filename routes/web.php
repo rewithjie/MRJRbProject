@@ -8,7 +8,18 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\AdminController;
 
+
+// Home Route - Role Selection Portal
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+Route::get('/home', function () {
+    return view('home');
+});
 
 Route::get('/hi', function () {
     return "hi laravel development!";
@@ -135,7 +146,6 @@ Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
 Route::get('/setup-test-data', [PageController::class, 'setupTestData']);
 Route::get('/logs', [PageController::class, 'logs'])->name('logs');
 
-Route::get('/maintenance', [PageController::class, 'maintenance'])->name('maintenance');
 Route::resource('students', StudentController::class);
 
 // Route::middleware('group')->group(function(){
@@ -153,4 +163,39 @@ Route::middleware('student.auth')->group(function () {
     Route::get('/student/home-dashboard', [AuthController::class, 'homeDashboard'])->name('student.home');
     Route::post('/student/change-password', [AuthController::class, 'changePassword'])->name('student.password.update');
     Route::post('/student/logout', [AuthController::class, 'logout'])->name('student.logout');
+});
+
+// ============== TEACHER ROUTES ==============
+Route::get('/teacher/login', [TeacherController::class, 'showLogin'])->name('teacher.login.show');
+Route::post('/teacher/login', [TeacherController::class, 'login'])->name('teacher.login');
+
+Route::middleware('teacher.auth')->group(function () {
+    Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+    Route::get('/teacher/home', [TeacherController::class, 'homeDashboard'])->name('teacher.home');
+    Route::post('/teacher/change-password', [TeacherController::class, 'changePassword'])->name('teacher.password.update');
+    Route::post('/teacher/logout', [TeacherController::class, 'logout'])->name('teacher.logout');
+});
+
+// ============== ADMIN ROUTES ==============
+Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login.show');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+
+Route::middleware('admin.auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Student Management
+    Route::get('/admin/students', [AdminController::class, 'manageStudents'])->name('admin.manage.students');
+    Route::get('/admin/students/add', [AdminController::class, 'addStudentForm'])->name('admin.add.student');
+    Route::post('/admin/students/store', [AdminController::class, 'storeStudent'])->name('admin.store.student');
+    Route::delete('/admin/students/{id}', [AdminController::class, 'deleteStudent'])->name('admin.delete.student');
+    
+    // Teacher Management
+    Route::get('/admin/teachers', [AdminController::class, 'manageTeachers'])->name('admin.manage.teachers');
+    Route::get('/admin/teachers/add', [AdminController::class, 'addTeacherForm'])->name('admin.add.teacher');
+    Route::post('/admin/teachers/store', [AdminController::class, 'storeTeacher'])->name('admin.store.teacher');
+    Route::delete('/admin/teachers/{id}', [AdminController::class, 'deleteTeacher'])->name('admin.delete.teacher');
+    
+    // Admin Account
+    Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.password.update');
+    Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 });

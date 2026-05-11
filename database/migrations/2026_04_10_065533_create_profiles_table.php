@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('bio')->nullable();
-            $table->string('avatar')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('profiles')) {
+            Schema::create('profiles', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+                $table->string('bio')->nullable();
+                $table->string('avatar')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

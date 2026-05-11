@@ -11,20 +11,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Apply global web middleware.
+        $middleware->web(append: []);
 
-
-    //middleware group
-    $middleware->group('group',[
-        \App\Http\Middleware\MiddlewareOne::class,
-        \App\Http\Middleware\MiddlewareTwo::class,
-        \App\Http\Middleware\DownForMaintnanceMW::class
+        // Middleware group.
+        $middleware->group('group', [
+            \App\Http\Middleware\MiddlewareOne::class,
+            \App\Http\Middleware\MiddlewareTwo::class,
         ]);
 
-        //route middleware
-    $middleware->alias([
-        'maintenance' => \App\Http\Middleware\DownForMaintnanceMW::class,
-        'student.auth' => \App\Http\Middleware\StudentAuth::class
-    ]);
+        // Route middleware aliases.
+        $middleware->alias([
+            'student.auth' => \App\Http\Middleware\StudentAuth::class,
+            'teacher.auth' => \App\Http\Middleware\TeacherAuth::class,
+            'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
