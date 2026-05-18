@@ -138,6 +138,7 @@ class AdminController extends Controller
             'password' => $request->password,
             'degree_id' => $request->degree_id,
             'role' => 'student',
+            'must_change_password' => true,
         ]);
 
         Log::info('Student created by admin', [
@@ -192,6 +193,7 @@ class AdminController extends Controller
             'specialty' => $request->specialty,
             'department' => $request->department,
             'is_active' => true,
+            'must_change_password' => true,
         ]);
 
         Log::info('Teacher created by admin', [
@@ -259,9 +261,16 @@ class AdminController extends Controller
         ]);
 
         Session::flush();
+        $request = request();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('admin.login.show')
-            ->with('success', 'Logged out successfully');
+            ->with('success', 'Logged out successfully')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0')
+            ->header('Clear-Site-Data', '"cache"');
     }
 
     /**

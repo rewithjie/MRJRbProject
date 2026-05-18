@@ -12,13 +12,37 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AdminController;
 
 
-// Home Route - Role Selection Portal
+// Home redirect behavior for authenticated/guest users
 Route::get('/', function () {
-    return view('home');
+    if (session()->has('student_id')) {
+        return redirect()->route('student.home');
+    }
+
+    if (session()->has('teacher_id')) {
+        return redirect()->route('teacher.home');
+    }
+
+    if (session()->has('admin_id')) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('student.login.show');
 })->name('home');
 
 Route::get('/home', function () {
-    return view('home');
+    if (session()->has('student_id')) {
+        return redirect()->route('student.home');
+    }
+
+    if (session()->has('teacher_id')) {
+        return redirect()->route('teacher.home');
+    }
+
+    if (session()->has('admin_id')) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('student.login.show');
 });
 
 Route::get('/hi', function () {
@@ -132,9 +156,6 @@ Route::get('/psu/eoms-policy', [PSUController::class, 'EOMSPolicy'])->name('psu.
 
 Route::get('/greetings',[ClientController::class, 'displayGreetings']);
 
-// Main home route
-Route::get('/', [StudentController::class, 'home'])->name('home');
-
 Route::get('/about',[StudentController::class, 'about'])->name('about');
 
 Route::resource('degrees', DegreeController::class);
@@ -146,7 +167,9 @@ Route::get('/enrolled-students', [PageController::class, 'enrolledStudents']);
 Route::get('/setup-test-data', [PageController::class, 'setupTestData']);
 Route::get('/logs', [PageController::class, 'logs'])->name('logs');
 
-Route::resource('students', StudentController::class);
+Route::middleware(['student.auth', 'no.cache'])->group(function () {
+    Route::resource('students', StudentController::class);
+});
 
 // Route::middleware('group')->group(function(){
 // Route::get('/about',[StudentController::class, 'about'])->name('about');
@@ -154,10 +177,12 @@ Route::resource('students', StudentController::class);
 // Route::get('/user_posts', [PageController::class, 'userPosts']);
 // });
 
-Route::get('/student/login', [AuthController::class, 'showLogin'])->name('student.login.show');
-Route::post('/student/login', [AuthController::class, 'login'])->name('student.login');
+Route::middleware('no.cache')->group(function () {
+    Route::get('/student/login', [AuthController::class, 'showLogin'])->name('student.login.show');
+    Route::post('/student/login', [AuthController::class, 'login'])->name('student.login');
+});
 
-Route::middleware('student.auth')->group(function () {
+Route::middleware(['student.auth', 'no.cache'])->group(function () {
     Route::get('/student/dashboard', [AuthController::class, 'dashboard'])->name('student.dashboard');
     Route::get('/student/new-dashboard', [AuthController::class, 'dashboard'])->name('student.new.dashboard');
     Route::get('/student/home-dashboard', [AuthController::class, 'homeDashboard'])->name('student.home');
@@ -166,10 +191,12 @@ Route::middleware('student.auth')->group(function () {
 });
 
 // ============== TEACHER ROUTES ==============
-Route::get('/teacher/login', [TeacherController::class, 'showLogin'])->name('teacher.login.show');
-Route::post('/teacher/login', [TeacherController::class, 'login'])->name('teacher.login');
+Route::middleware('no.cache')->group(function () {
+    Route::get('/teacher/login', [TeacherController::class, 'showLogin'])->name('teacher.login.show');
+    Route::post('/teacher/login', [TeacherController::class, 'login'])->name('teacher.login');
+});
 
-Route::middleware('teacher.auth')->group(function () {
+Route::middleware(['teacher.auth', 'no.cache'])->group(function () {
     Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
     Route::get('/teacher/home', [TeacherController::class, 'homeDashboard'])->name('teacher.home');
     Route::post('/teacher/change-password', [TeacherController::class, 'changePassword'])->name('teacher.password.update');
@@ -177,10 +204,12 @@ Route::middleware('teacher.auth')->group(function () {
 });
 
 // ============== ADMIN ROUTES ==============
-Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login.show');
-Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+Route::middleware('no.cache')->group(function () {
+    Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login.show');
+    Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+});
 
-Route::middleware('admin.auth')->group(function () {
+Route::middleware(['admin.auth', 'no.cache'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     // Student Management
@@ -199,3 +228,27 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.password.update');
     Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 });
+
+Route::any('/student/{any}', function () {
+    if (session()->has('student_id')) {
+        return redirect()->route('student.home');
+    }
+
+    return redirect()->route('student.login.show');
+})->where('any', '.*');
+
+Route::any('/teacher/{any}', function () {
+    if (session()->has('teacher_id')) {
+        return redirect()->route('teacher.home');
+    }
+
+    return redirect()->route('teacher.login.show');
+})->where('any', '.*');
+
+Route::any('/admin/{any}', function () {
+    if (session()->has('admin_id')) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    return redirect()->route('admin.login.show');
+})->where('any', '.*');

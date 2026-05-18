@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'student.auth' => \App\Http\Middleware\StudentAuth::class,
             'teacher.auth' => \App\Http\Middleware\TeacherAuth::class,
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+            'no.cache' => \App\Http\Middleware\NoCache::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

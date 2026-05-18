@@ -17,6 +17,17 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
+        if (Session::has('student_id')) {
+            $student = Student::find(Session::get('student_id'));
+            if ($student && $student->must_change_password) {
+                return redirect()->route('student.dashboard');
+            }
+
+            if ($student) {
+                return redirect()->route('student.home');
+            }
+        }
+
         return view('auth.login');
     }
 
@@ -78,6 +89,7 @@ class AuthController extends Controller
         Session::put('student_id', $student->id);
         Session::put('student_name', $student->fname . ' ' . $student->mname . ' ' . $student->lname);
         Session::put('student_email', $studentEmail);
+        Session::regenerate();
 
         Log::info('Student login successful', [
             'student_id' => $student->id,
@@ -85,7 +97,12 @@ class AuthController extends Controller
             'timestamp' => now(),
         ]);
 
-        return redirect()->route('home')
+        if ($student->must_change_password) {
+            return redirect()->route('student.dashboard')
+                ->with('warning', 'Please change your password before continuing.');
+        }
+
+        return redirect()->route('student.home')
             ->with('success', 'Welcome ' . $student->fname);
     }
 
@@ -107,6 +124,11 @@ class AuthController extends Controller
 
         $studentEmail = $student->email ?? $student->userAccount?->email ?? Session::get('student_email');
         Session::put('student_email', $studentEmail);
+
+        if ($student->must_change_password) {
+            return redirect()->route('student.dashboard')
+                ->with('warning', 'Please change your password first.');
+        }
 
         return view('student.home', [
             'student' => $student,
@@ -175,6 +197,7 @@ class AuthController extends Controller
         }
 
         $student->password = $request->new_password;
+        $student->must_change_password = false;
         $student->save();
 
         Log::info('Student password changed', [
@@ -198,7 +221,14 @@ class AuthController extends Controller
         ]);
 
         Session::flush();
+        $request = request();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('student.login.show')
-            ->with('success', 'You have been logged out successfully');
+            ->with('success', 'You have been logged out successfully')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0')
+            ->header('Clear-Site-Data', '"cache"');
     }
 }

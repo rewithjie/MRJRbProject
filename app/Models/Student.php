@@ -20,10 +20,15 @@ class Student extends Model
         'degree_id',
         'user_account_id',
         'role',
+        'must_change_password',
     ];
 
     protected $hidden = [
         'password',
+    ];
+
+    protected $casts = [
+        'must_change_password' => 'boolean',
     ];
 
     /**

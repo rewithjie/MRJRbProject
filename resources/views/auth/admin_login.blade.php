@@ -26,12 +26,12 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.login') }}">
+                    <form method="POST" action="{{ route('admin.login') }}" autocomplete="off">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                   id="email" name="email" value="{{ old('email') }}" required>
+                                   id="email" name="email" value="{{ old('email') }}" autocomplete="off" required>
                             @error('email')
                                 <small class="text-danger d-block mt-1">{{ $message }}</small>
                             @enderror
@@ -41,7 +41,7 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                       id="password" name="password" required>
+                                       id="password" name="password" autocomplete="new-password" required>
                                 <button type="button" class="btn btn-outline-secondary" id="toggle-login-password">
                                     Show
                                 </button>
@@ -76,6 +76,11 @@
     </div>
 
     <script>
+        history.pushState(null, '', location.href);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, '', location.href);
+        });
+
         const togglePasswordBtn = document.getElementById('toggle-login-password');
         const passwordInput = document.getElementById('password');
 

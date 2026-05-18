@@ -15,6 +15,17 @@ class TeacherController extends Controller
      */
     public function showLogin()
     {
+        if (Session::has('teacher_id')) {
+            $teacher = Teacher::find(Session::get('teacher_id'));
+            if ($teacher && $teacher->must_change_password) {
+                return redirect()->route('teacher.dashboard');
+            }
+
+            if ($teacher) {
+                return redirect()->route('teacher.home');
+            }
+        }
+
         return view('auth.teacher_login');
     }
 
@@ -56,11 +67,17 @@ class TeacherController extends Controller
         Session::put('teacher_id', $teacher->id);
         Session::put('teacher_email', $teacher->email);
         Session::put('teacher_name', "{$teacher->fname} {$teacher->lname}");
+        Session::regenerate();
 
         Log::info('Teacher login successful', [
             'teacher_id' => $teacher->id,
             'email' => $teacher->email,
         ]);
+
+        if ($teacher->must_change_password) {
+            return redirect()->route('teacher.dashboard')
+                ->with('warning', 'Please change your password before continuing.');
+        }
 
         return redirect()->route('teacher.home')
             ->with('success', 'Login successful! Welcome back.');
@@ -97,6 +114,11 @@ class TeacherController extends Controller
                 ->with('error', 'Session expired. Please login again.');
         }
 
+        if ($teacher->must_change_password) {
+            return redirect()->route('teacher.dashboard')
+                ->with('warning', 'Please change your password first.');
+        }
+
         return view('teacher.home', ['teacher' => $teacher]);
     }
 
@@ -110,9 +132,16 @@ class TeacherController extends Controller
         ]);
 
         Session::flush();
+        $request = request();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('teacher.login.show')
-            ->with('success', 'Logged out successfully');
+            ->with('success', 'Logged out successfully')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0')
+            ->header('Clear-Site-Data', '"cache"');
     }
 
     /**
@@ -140,12 +169,13 @@ class TeacherController extends Controller
         }
 
         if (!Hash::check($request->old_password, $teacher->password)) {
-            return redirect()->route('teacher.home')
+            return redirect()->route('teacher.dashboard')
                 ->withErrors(['old_password' => 'Old password is incorrect.'])
                 ->withInput();
         }
 
         $teacher->password = $request->new_password;
+        $teacher->must_change_password = false;
         $teacher->save();
 
         Log::info('Teacher password changed', [

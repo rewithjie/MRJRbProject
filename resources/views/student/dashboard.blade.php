@@ -33,6 +33,14 @@
                 Logged in as: <strong>{{ $student->fname }} {{ $student->mname }} {{ $student->lname }}</strong>
                 ({{ $studentEmail }})
             </p>
+            <div class="mt-3">
+                <form method="POST" action="{{ route('student.logout') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-warning">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
         </div>
 
         @if (session('success'))
@@ -41,6 +49,10 @@
 
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        @if (session('warning'))
+            <div class="alert alert-warning">{{ session('warning') }}</div>
         @endif
 
         <div class="row g-4">

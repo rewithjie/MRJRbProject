@@ -17,6 +17,7 @@ class Teacher extends Model
         'specialty',
         'department',
         'is_active',
+        'must_change_password',
     ];
 
     protected $hidden = [
@@ -25,6 +26,7 @@ class Teacher extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'must_change_password' => 'boolean',
     ];
 
     /**

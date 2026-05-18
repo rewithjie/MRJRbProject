@@ -3,6 +3,9 @@
 <head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>@yield('title', 'Student Management Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -228,24 +231,49 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('student.dashboard') || request()->routeIs('student.new.dashboard') || request()->routeIs('student.home') ? 'active' : '' }}" href="{{ route('student.dashboard') }}">Student Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}" href="{{ route('students.index') }}">Students</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('degrees.*') ? 'active' : '' }}" href="{{ route('degrees.index') }}">Degrees</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
-                    </li>
+                    @php
+                        $isAdminArea = request()->is('admin/*');
+                        $isTeacherArea = request()->is('teacher/*');
+                        $isStudentArea = request()->is('student/*') || request()->is('students*');
+                    @endphp
+
+                    @if ($isAdminArea)
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.manage.students') ? 'active' : '' }}" href="{{ route('admin.manage.students') }}">Manage Students</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.manage.teachers') ? 'active' : '' }}" href="{{ route('admin.manage.teachers') }}">Manage Teachers</a>
+                        </li>
+                    @elseif ($isTeacherArea)
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('teacher.home') ? 'active' : '' }}" href="{{ route('teacher.home') }}">Teacher Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}" href="{{ route('teacher.dashboard') }}">Teacher Dashboard</a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('student.dashboard') || request()->routeIs('student.new.dashboard') || request()->routeIs('student.home') ? 'active' : '' }}" href="{{ route('student.dashboard') }}">Student Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('students.*') ? 'active' : '' }}" href="{{ route('students.index') }}">Students</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('degrees.*') ? 'active' : '' }}" href="{{ route('degrees.index') }}">Degrees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -266,5 +294,19 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDzlPLNUeeqnsIY40JmqrP4ukNHlF7p3c/f7jmrxeXsRxRBtzPbkm5Z5Z0K" crossorigin="anonymous"></script>
+    <script>
+        // Helps disable back-forward cache in some browsers.
+        window.addEventListener('unload', function () {});
+
+        window.addEventListener('pageshow', function (event) {
+            const navEntries = performance.getEntriesByType('navigation');
+            const isBackForward = navEntries.length > 0 && navEntries[0].type === 'back_forward';
+            const isLegacyBackForward = performance.navigation && performance.navigation.type === 2;
+
+            if (event.persisted || isBackForward || isLegacyBackForward) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 </html>

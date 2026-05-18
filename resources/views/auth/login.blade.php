@@ -35,7 +35,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('student.login') }}">
+                    <form method="POST" action="{{ route('student.login') }}" autocomplete="off">
                         @csrf
 
                         <div class="mb-3">
@@ -51,6 +51,7 @@
                                     name="email" 
                                     placeholder="Enter your email"
                                     value="{{ old('email') }}"
+                                    autocomplete="off"
                                     required
                                     autofocus>
                             </div>
@@ -71,6 +72,7 @@
                                     id="password" 
                                     name="password" 
                                     placeholder="Enter your password"
+                                    autocomplete="new-password"
                                     required>
                                 <button type="button" class="btn btn-outline-secondary" id="toggle-login-password">
                                     Show
@@ -89,9 +91,9 @@
                     <hr class="my-4" style="border-color: #333;">
 
                     <div class="text-center">
-                        <p class="text-muted mb-2">Don't have an account?</p>
-                        <a href="{{ route('students.create') }}" class="btn btn-outline-warning w-100">
-                            <i class="fas fa-user-plus"></i> Register as New Student
+                        <p class="text-muted mb-2">Need an account?</p>
+                        <a href="{{ route('home') }}" class="btn btn-outline-warning w-100">
+                            <i class="fas fa-user-shield"></i> Contact Admin
                         </a>
                     </div>
                 </div>
@@ -164,6 +166,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            history.pushState(null, '', location.href);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, '', location.href);
+            });
+
             const loginPasswordInput = document.getElementById('password');
             const loginToggleBtn = document.getElementById('toggle-login-password');
 
